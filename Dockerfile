@@ -15,4 +15,4 @@ RUN npm install
 EXPOSE 8080
 
 # Comando para iniciar a aplicação
-CMD ["npm", "dev"]
+CMD ["npm", "start"]
