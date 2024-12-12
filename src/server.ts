@@ -6,6 +6,7 @@ import { routes } from "./routes.ts";
 const app = fastify({ logger: true})
 dotenv.config()
 
+
 app.setErrorHandler((error, request, reply) => {
     reply.code(400).send({ message: error.message})
 })
