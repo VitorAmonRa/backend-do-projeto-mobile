@@ -12,7 +12,7 @@ COPY . .
 RUN npm install
 
 # Expor a porta usada pela API
-EXPOSE 3333
+EXPOSE 8080
 
 # Comando para iniciar a aplicação
 CMD ["npm", "dev"]
