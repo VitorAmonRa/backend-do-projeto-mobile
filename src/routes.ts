@@ -11,12 +11,11 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         reply.send({ ok: true })
     })
 
-    fastify.post("/product", async (request: FastifyRequest, reply: FastifyReply) => {
-        return new CreateProductsController().handle( request, reply)
-    })
-
     fastify.get("/products", async (request: FastifyRequest, reply: FastifyReply) => {
         return new ListProductsController().handle( request, reply)
+    })
+    fastify.post("/product", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new CreateProductsController().handle( request, reply)
     })
     fastify.delete("/product", async (request: FastifyRequest, reply: FastifyReply) => {
         return new DeleteProductsController().handle( request, reply)
