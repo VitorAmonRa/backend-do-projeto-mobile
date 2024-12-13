@@ -1,11 +1,9 @@
 import fastify, { FastifyRequest, FastifyReply } from "fastify";
 import { AuthUserService } from "../services/AuthUserService"
 
-interface LoginRequest extends FastifyRequest {
-    body: {
+interface LoginRequest {
       email: string;
       password: string;
-    };
   }
   
 class AuthUserController {
@@ -15,8 +13,8 @@ class AuthUserController {
       this.authService = new AuthUserService();
     }
   
-    async login(req: LoginRequest, reply: FastifyReply) {
-      const { email, password } = req.body;
+    async login(req: FastifyRequest, reply: FastifyReply) {
+      const { email, password } = req.body as LoginRequest; 
   
       try {
         const token = await this.authService.login(email, password);

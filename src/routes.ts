@@ -22,6 +22,6 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return new DeleteProductsController().handle( request, reply)
     })
     fastify.post("/login", async (request: FastifyRequest, reply: FastifyReply) => {
-        return new AuthUserController().handle( request, reply)
+        return new AuthUserController().login( request, reply)
     })
 } 
