@@ -1,24 +1,32 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { DataUserProps } from "../controllers/AuthUserController";
-import prisma from "../prisma";
+import PrismaClient from "../prisma"
+import jwt from 'fastify-jwt';
+import bcrypt from 'bcrypt'
 
-class AuthUserService{
-    async execute ({ token, email, password}: DataUserProps){
-        
-        const user = await prisma.user.findUnique({ where: { email } });
-            if (!user) {
-                throw new Error('Usuário não encontrado');
-            }
+import { app } from '../server'
 
-            // Verifica se a senha está correta
-            const isPasswordValid = await prisma.user.findFirst({ where: { password } });
-            if (!isPasswordValid) {
-                throw new Error('Senha inválida');
-            }
+class AuthUserService {
+  async login(email: string, password: string): Promise<string> {
+    const user = await PrismaClient.user.findUnique({
+      where: { email },
+    });
 
-            return user;
-        
+    if (!user) {
+      throw new Error('Usuário não encontrado');
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw new Error('Credenciais inválidas');
+    }
+
+    // Gera um token JWT
+    const token = app.jwt.sign({ id: user.id, email: user.email },{
+      expiresIn: '1h',
+    });
+
+    return token;
+  }
 }
 
 export { AuthUserService }
