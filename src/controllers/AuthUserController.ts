@@ -1,27 +1,29 @@
 import fastify, { FastifyRequest, FastifyReply } from "fastify";
 import { AuthUserService } from "../services/AuthUserService"
-import prismaClient from "../prisma";
 
-export interface DataUserProps{
-    token: string,
-    email: string,
-    password: string,
-}
-class AuthUserController{
-    async handle(request: FastifyRequest, reply: FastifyReply){
-        const { token, email, password } = request.body as DataUserProps;
-
-        try {
-            const user =  new AuthUserService();
-
-            const userAuth = user.execute({token ,email, password})
-            
-            reply.send(userAuth);
-        } catch (error) {
-            reply.status(400).send({ error: error.message });
-        }
-
-            }
-}
-
+interface LoginRequest extends FastifyRequest {
+    body: {
+      email: string;
+      password: string;
+    };
+  }
+  
+class AuthUserController {
+    private authService: AuthUserService;
+  
+    constructor() {
+      this.authService = new AuthUserService();
+    }
+  
+    async login(req: LoginRequest, reply: FastifyReply) {
+      const { email, password } = req.body;
+  
+      try {
+        const token = await this.authService.login(email, password);
+        return reply.status(200).send({ token });
+      } catch (err) {
+        return reply.status(401).send({ message: err.message });
+      }
+    }
+  }
 export { AuthUserController }
