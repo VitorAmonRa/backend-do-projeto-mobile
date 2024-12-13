@@ -15,8 +15,8 @@ class AuthUserController{
 
         try {
             const user =  new AuthUserService();
-
-            reply.send(user);
+            
+            reply.send({token});
         } catch (error) {
             reply.status(400).send({ error: error.message });
         }
