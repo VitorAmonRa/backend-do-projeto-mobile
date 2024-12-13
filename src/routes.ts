@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginOptions, FastifyRequest, FastifyReply } f
 import { CreateProductsController } from './controllers/CreateProductsController'
 import { ListProductsController } from './controllers/ListProductsController'
 import { DeleteProductsController } from './controllers/DeleteProductsController'
+import { AuthUserController } from "./controllers/AuthUserController";
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
     
@@ -19,5 +20,8 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     })
     fastify.delete("/product", async (request: FastifyRequest, reply: FastifyReply) => {
         return new DeleteProductsController().handle( request, reply)
+    })
+    fastify.post("/login", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new AuthUserController().handle( request, reply)
     })
 } 
