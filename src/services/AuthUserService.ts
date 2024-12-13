@@ -15,7 +15,9 @@ class AuthUserService {
       throw new Error('Usuário não encontrado');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await PrismaClient.user.findFirst({
+        where: { password },
+      });;
 
     if (!isPasswordValid) {
       throw new Error('Credenciais inválidas');
