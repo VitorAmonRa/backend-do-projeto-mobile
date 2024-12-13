@@ -2,8 +2,6 @@ import fastify, { FastifyRequest, FastifyReply } from "fastify";
 import { AuthUserService } from "../services/AuthUserService"
 import prismaClient from "../prisma";
 
-const jwt = require('fastify-jwt');
-
 export interface DataUserProps{
     token: string,
     email: string,
@@ -15,8 +13,10 @@ class AuthUserController{
 
         try {
             const user =  new AuthUserService();
+
+            const userAuth = user.execute({token ,email, password})
             
-            reply.send({token});
+            reply.send(userAuth);
         } catch (error) {
             reply.status(400).send({ error: error.message });
         }
