@@ -9,17 +9,13 @@ export interface DataProps {
 }
 
 class CreateProductsController {
-    async handle(request: FastifyRequest, reply: FastifyReply) {
-        const { name, validate, amount, price } = request.body as DataProps;
+    async handle(request, reply) {
+        const { name, validate, amount, price } = request.body;
 
-        const create = new CreateProductsService();
+        const createProductsService = new CreateProductsService();
+        const product = await createProductsService.execute({ name, validate, amount, price });
 
-        try {
-            const products = await create.execute({ name, validate, amount, price });
-            reply.send(products);
-        } catch (error) {
-            reply.status(400).send({ error: "Erro ao criar produto" });
-        }
+        return reply.status(201).send(product);
     }
 }
 
