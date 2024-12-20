@@ -20,7 +20,7 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
       async execute({ name, validate, amount, price }: DataProps) {
           const discountedPrice = calculateDiscount(validate, price);
   
-          const products = await prisma.products.create({
+          const product = await prisma.products.create({
               data: {
                   name,
                   validate,
@@ -30,7 +30,7 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
               }
           });
   
-          return products;
+          return product;
       }
   }
   
