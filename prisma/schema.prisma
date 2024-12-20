@@ -10,7 +10,7 @@ datasource db {
 model Products {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  validate   DateTime
+  validate   String
   amount     String
   price      String
   created_at DateTime @default(now())
