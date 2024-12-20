@@ -6,17 +6,16 @@ export interface DataProps {
     validate: string;
     amount: string;
     price: string;
-    discountedPrice: string
 }
 
 class CreateProductsController {
     async handle(request: FastifyRequest, reply: FastifyReply) {
-        const { name, validate, amount, price, discountedPrice } = request.body as DataProps;
+        const { name, validate, amount, price } = request.body as DataProps;
 
         const create = new CreateProductsService();
 
         try {
-            const products = await create.execute({ name, validate, amount, price, discountedPrice });
+            const products = await create.execute({ name, validate, amount, price });
             reply.send(products);
         } catch (error) {
             reply.status(400).send({ error: "Erro ao criar produto" });
