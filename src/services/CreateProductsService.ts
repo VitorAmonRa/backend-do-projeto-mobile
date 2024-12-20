@@ -21,7 +21,7 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
         throw new Error("Invalid price format");
     }
 
-    if (dayDifference <= 15) {
+    if (dayDifference <= 7) {
         return (priceNumber * 0.9).toFixed(2); // 10% de desconto
     }
     return originalPrice;
