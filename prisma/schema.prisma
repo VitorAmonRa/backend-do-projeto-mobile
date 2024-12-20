@@ -13,6 +13,7 @@ model Products {
   validate   String
   amount     String
   price      String
+  discountedPrice  String
   created_at DateTime @default(now())
   sales      Sales[]
 
