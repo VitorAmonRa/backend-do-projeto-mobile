@@ -2,10 +2,26 @@ import fastify from "fastify";
 import cors from '@fastify/cors'
 import dotenv from 'dotenv'
 import { routes } from "./routes.ts";
+import bcrypt from 'bcrypt';
+import fastifyJWT  from 'fastify-jwt';
 
-const app = fastify({ logger: true})
+
+export const app = fastify({ logger: true})
 dotenv.config()
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+
+app.register(fastifyJWT, {
+    secret: JWT_SECRET, // Substitua por uma chave forte e segura
+  });
+
+app.decorate('authenticate', async function (request: any, reply: any) {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      reply.send(err);
+    }
+});
 
 app.setErrorHandler((error, request, reply) => {
     reply.code(400).send({ message: error.message})
