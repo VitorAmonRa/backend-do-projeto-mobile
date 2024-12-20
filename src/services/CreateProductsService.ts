@@ -52,13 +52,11 @@ class CreateProductsService {
                 validate,
                 amount,
                 price,
+                discountedPrice,
             }
         });
 
-        return {
-            ...product,
-            discountedPrice,
-        };
+        return product
     }
 }
 
