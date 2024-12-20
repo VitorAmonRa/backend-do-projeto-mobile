@@ -8,31 +8,20 @@ export interface DataProps {
     price: string;
 }
 
-// Função para converter a data para o formato ISO
-function convertDateToISO(dateString: string): string {
-    const [day, month, year] = dateString.split('/');
-    return `20${year}-${month}-${day}`;
-}
-
 class CreateProductsController {
     async handle(request: FastifyRequest, reply: FastifyReply) {
         const { name, validate, amount, price } = request.body as DataProps;
 
-        // Converte a data para o formato ISO
-        const formattedDate = convertDateToISO(validate);
+        console.log("Dados recebidos no backend:", { name, validate, amount, price });
 
-        // Criação do serviço de produto
         const create = new CreateProductsService();
-
-        // Passa os dados para o serviço, incluindo a data convertida
-        const product = await create.execute({
-            name,
-            validate: formattedDate, // Data convertida
-            amount,
-            price,
-        });
-
-        reply.send(product);
+        try {
+            const products = await create.execute({ name, validate, amount, price });
+            reply.send(products);
+        } catch (error) {
+            console.error("Erro ao criar produto:", error);
+            reply.status(400).send({ error: "Erro ao criar produto" });
+        }
     }
 }
 
