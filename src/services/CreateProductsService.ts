@@ -13,7 +13,7 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
     if (dayDifference <= 7) {
       return (parseFloat(originalPrice) * 0.9).toFixed(2); // 10% de desconto
     }
-    return originalPrice;
+    return parseFloat(originalPrice).toFixed(2);
   };
   
   class CreateProductsService {
