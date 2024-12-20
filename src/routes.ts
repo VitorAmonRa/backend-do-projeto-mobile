@@ -25,7 +25,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     fastify.post("/login", async (request: FastifyRequest, reply: FastifyReply) => {
         return new AuthUserController().login( request, reply)
     })
-    fastify.post("/product/markdown", async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.get("/product/markdown", async (request: FastifyRequest, reply: FastifyReply) => {
         return new PriceMarkdownController().handle( request, reply)
     })
 } 
