@@ -10,10 +10,10 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
     const timeDifference = productExpiry.getTime() - today.getTime();
     const dayDifference = timeDifference / (1000 * 3600 * 24);
   
-    if (dayDifference <= 7) {
+    if (dayDifference <= 15) {
       return (parseFloat(originalPrice) * 0.9).toFixed(2); // 10% de desconto
     }
-    return parseFloat(originalPrice).toFixed(2);
+    return originalPrice
   };
   
   class CreateProductsService {
