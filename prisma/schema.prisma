@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,20 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Products { 
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  validate String
-  amount String
-  price String
-  created_at DateTime? @default(now())
+model Products {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  validate   DateTime
+  amount     String
+  price      String
+  created_at DateTime @default(now())
+  sales      Sales[]
 
- @@map("products") 
+  @@map("products")
 }
+
+model Sales {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId  String   @db.ObjectId
+  quantity   Int
+  created_at DateTime @default(now())
+
+  product    Products @relation(fields: [productId], references: [id])
+
+  @@map("sales")
+}
+
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  email    String   @unique
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
   password String
 
-  @@map("users") 
+  @@map("users")
 }
