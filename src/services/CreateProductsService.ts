@@ -5,6 +5,11 @@ import prisma from "../prisma";
 const calculateDiscount = (expiryDate: string, originalPrice: string): string => {
     const today = new Date();
     const [day, month, year] = expiryDate.split('/');
+
+    if (!day || !month || !year) {
+        throw new Error("Invalid expiry date format");
+    }
+
     const productExpiry = new Date(Number(`20${year}`), Number(month) - 1, Number(day));
     
     console.log(`Today: ${today}`);
@@ -35,7 +40,7 @@ class CreateProductsService {
         console.log(`Validate: ${validate}`);
         console.log(`Amount: ${amount}`);
         console.log(`Price: ${price}`);
-        
+
         const discountedPrice = calculateDiscount(validate, price);
 
         const product = await prisma.products.create({
