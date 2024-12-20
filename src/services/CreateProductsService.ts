@@ -5,7 +5,7 @@ import prisma from "../prisma";
 const calculateDiscount = (expiryDate: string, originalPrice: string): string => {
     const today = new Date();
     const [day, month, year] = expiryDate.split('/');
-
+    
     if (!day || !month || !year) {
         throw new Error("Invalid expiry date format");
     }
@@ -20,8 +20,11 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
     
     console.log(`Day Difference: ${dayDifference}`);
     
-    const priceNumber = parseFloat(originalPrice);
+    // Remove "R$" and replace comma with dot
+    const cleanedPrice = originalPrice.replace('R$', '').replace(',', '.').trim();
+    const priceNumber = parseFloat(cleanedPrice);
     console.log(`Original Price: ${originalPrice}`);
+    console.log(`Cleaned Price: ${cleanedPrice}`);
     console.log(`Parsed Price: ${priceNumber}`);
     
     if (isNaN(priceNumber)) {
@@ -31,7 +34,7 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
     if (dayDifference <= 15) {
         return (priceNumber * 0.9).toFixed(2); // 10% de desconto
     }
-    return originalPrice;
+    return cleanedPrice;
 };
 
 class CreateProductsService {
