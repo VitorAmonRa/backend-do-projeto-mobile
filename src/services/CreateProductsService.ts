@@ -1,6 +1,7 @@
 import PrismaClient from "../prisma";
 import { DataProps } from "../controllers/CreateProductsController";
 import prisma from "../prisma";
+import cron from 'node-cron';
 
 const calculateDiscount = (expiryDate: string, originalPrice: string): string => {
     const today = new Date();
@@ -31,10 +32,14 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
         throw new Error("Invalid price format");
     }
 
+    // Calculate discount percentage based on days remaining
+    let discountPercentage = 0;
     if (dayDifference <= 15) {
-        return (priceNumber * 0.9).toFixed(2); // 10% de desconto
+        discountPercentage = 10 + (15 - dayDifference) * 2; // Example: 10% base + 2% per day closer to expiry
     }
-    return cleanedPrice;
+
+    const discountedPrice = priceNumber * (1 - discountPercentage / 100);
+    return discountedPrice.toFixed(2);
 };
 
 class CreateProductsService {
@@ -56,8 +61,34 @@ class CreateProductsService {
             }
         });
 
-        return product
+        return {
+            ...product,
+            discountedPrice,
+        };
+    }
+
+    // Método para atualizar preços com desconto
+    async updateDiscountedPrices() {
+        console.log('Atualizando preços com desconto...');
+
+        const products = await prisma.products.findMany();
+
+        for (const product of products) {
+            const discountedPrice = calculateDiscount(product.validate, product.price);
+            await prisma.products.update({
+                where: { id: product.id },
+                data: { discountedPrice },
+            });
+        }
+
+        console.log('Preços com desconto atualizados.');
     }
 }
+
+// Agendar a tarefa para rodar todos os dias à meia-noite
+const createProductsService = new CreateProductsService();
+cron.schedule('0 0 * * *', () => {
+    createProductsService.updateDiscountedPrices();
+});
 
 export { CreateProductsService };
