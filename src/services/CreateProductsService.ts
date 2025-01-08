@@ -43,7 +43,7 @@ const calculateDiscount = (expiryDate: string, originalPrice: string): string =>
 };
 
 class CreateProductsService {
-    async execute({ name, validate, amount, price }: DataProps) {
+    async execute({ name, validate, amount, price, category }: DataProps) {
         console.log(`Name: ${name}`);
         console.log(`Validate: ${validate}`);
         console.log(`Amount: ${amount}`);
@@ -58,6 +58,7 @@ class CreateProductsService {
                 amount,
                 price,
                 discountedPrice,
+                category
             }
         });
 

@@ -14,6 +14,7 @@ model Products {
   amount     String
   price      String
   discountedPrice String?
+  category        String
   created_at DateTime @default(now())
   sales      Sales[]
 
