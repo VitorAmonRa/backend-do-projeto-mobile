@@ -2,9 +2,9 @@ import fastify, { FastifyRequest, FastifyReply } from "fastify";
 import { AuthUserService } from "../services/AuthUserService"
 
 interface LoginRequest {
-      email: string;
-      password: string;
-  }
+  username: string;
+  password: string;
+}
   
 class AuthUserController {
     private authService: AuthUserService;
@@ -14,10 +14,10 @@ class AuthUserController {
     }
   
     async login(req: FastifyRequest, reply: FastifyReply) {
-      const { email, password } = req.body as LoginRequest; 
+      const { username, password } = req.body as LoginRequest; 
   
       try {
-        const token = await this.authService.login(email, password);
+        const token = await this.authService.login(username, password);
         return reply.status(200).send({ token });
       } catch (err) {
         return reply.status(401).send({ message: err.message });

@@ -6,9 +6,9 @@ import { app } from '../server'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 class AuthUserService {
-  async login(email: string, password: string): Promise<string> {
-    const user = await PrismaClient.user.findUnique({
-      where: { email },
+  async login(username: string, password: string): Promise<string> {
+    const user = await PrismaClient.user.findFirst({
+      where: { username },
     });
 
     if (!user) {
@@ -24,7 +24,7 @@ class AuthUserService {
     }
 
     // Gera um token JWT
-    const token = app.jwt.sign({ id: user.id, email: user.email }, { expiresIn: '1h'});
+    const token = app.jwt.sign({ id: user.id, username: user.username }, { expiresIn: '1h'});
 
     return token;
   }
