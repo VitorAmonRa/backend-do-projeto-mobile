@@ -33,7 +33,7 @@ model Sales {
 
 model User {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  username    String @unique
+  username String? @unique
   password String
 
   @@map("users")
